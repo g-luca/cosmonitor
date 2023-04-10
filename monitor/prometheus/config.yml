@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "monitor"
+    metrics_path: "/federate"
+    honor_labels: true
+    file_sd_configs:
+      - files:
+          - targets.json
+
+    params:
+      "match[]":
+        - '{job="info"}'
+        - '{job="cometbft"}'
+        - '{job="hardware"}'
+        - '{__name__=~"job:.*"}'
