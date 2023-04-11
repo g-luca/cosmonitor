@@ -1,0 +1,36 @@
+global:
+  scrape_interval: 15s # Scrape the targets every N seconds.
+  scrape_timeout: 15s # If scrape fails, retry in N seconds. Must be
+  evaluation_interval: 15s # Evaluate rules every N seconds.
+
+scrape_configs:
+  # scrape the default cometbft prometheus metrics
+  - job_name: cometbft
+    scrape_interval: 5s # Scrape the targets every N seconds.
+    metrics_path: /metrics
+    honor_labels: true
+    static_configs:
+      - targets: [host.docker.internal:26660]
+
+  # scrape the rpc to get node infos
+  - job_name: "info"
+    scrape_interval: 1m # Scrape the targets every N seconds.
+    metrics_path: /probe
+    honor_labels: true
+    static_configs:
+      - targets:
+          - http://host.docker.internal:26657/status
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: json_exporter:7979
+
+  # scrape the node hardware monitor
+  - job_name: "hardware"
+    scrape_interval: 15s # Scrape the targets every N seconds.
+    honor_labels: true
+    static_configs:
+      - targets: ["node-exporter:9100"]

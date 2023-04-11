@@ -1,0 +1,14 @@
+modules:
+  default:
+    metrics:
+      - name: node
+        type: object
+        path: "{ .result }"
+        help: Essential Node rpc /status values
+        labels:
+          id: "{ .node_info.id }"
+          network: "{ .node_info.network }"
+          moniker: "{ .node_info.moniker }"
+          validator_address: "{ .validator_info.address }"
+        values:
+          info: "{.sync_info.catching_up}"
