@@ -6,6 +6,7 @@ services:
     container_name: monitor-prometheus
     volumes:
       - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/config.yml'
       - '--log.level=debug'
@@ -13,3 +14,7 @@ services:
       - "9090:9090"
 networks:
   monitoring:
+
+volumes:
+  prometheus-data:
+    driver: local

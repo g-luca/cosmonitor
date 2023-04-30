@@ -11,7 +11,7 @@ scrape_configs:
 
     params:
       "match[]":
-        - '{job="info"}'
+        - '{job="cosmonitor"}'
         - '{job="cometbft"}'
         - '{job="hardware"}'
         - '{__name__=~"job:.*"}'

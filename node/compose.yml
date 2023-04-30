@@ -1,15 +1,13 @@
 version: '3'
 services:
   # prometheus json exporter
-  json_exporter:
-    image: prometheuscommunity/json-exporter:latest
-    container_name: json_exporter
-    volumes:
-      - ./prometheus/json-exporter.yml:/etc/json-exporter/json-exporter.yml
-    command:
-      - '--config.file=/etc/json-exporter/json-exporter.yml'
+  cosmonitor:
+    image: graziottil/cosmonitor:latest
+    container_name: cosmonitor
+    environment:
+      NODE_RPC: "http://host.docker.internal:26657"
     ports:
-      - "7979"
+      - "9110:9090"
     extra_hosts:
       # let the container access the host network (needs to access the node rpc endpoint)
       - "host.docker.internal:host-gateway"
@@ -20,6 +18,7 @@ services:
     container_name: monitor-prometheus
     volumes:
       - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/config.yml'
       - '--log.level=debug'
@@ -38,3 +37,7 @@ services:
 
 networks:
   monitoring:
+
+volumes:
+  prometheus-data:
+    driver: local
