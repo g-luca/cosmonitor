@@ -12,6 +12,15 @@ services:
       - '--log.level=debug'
     ports:
       - "9090:9090"
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
+
 networks:
   monitoring:
 

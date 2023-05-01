@@ -1,0 +1,14 @@
+# sample alertmanager.yml, configure with the proper telegram config or other custom solutions
+# other sources here: https://prometheus.io/docs/alerting/latest/configuration/#receiver-integration-settings
+global:
+  resolve_timeout: 1m
+
+route:
+  receiver: telegram
+
+receivers:
+  - name: telegram
+    telegram_configs:
+      - bot_token: <TELEGRAM_BOT_TOKEN>
+        api_url: https://api.telegram.org
+        chat_id: <TELEGRAM_CHAT_ID>
