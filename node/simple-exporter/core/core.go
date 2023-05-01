@@ -164,9 +164,6 @@ func UpdateMetrics(rpcAddr string) error {
 	}
 	prometheus.UpdateValidatorRewards(rewards)
 
-	log.Println(commission.String())
-	log.Println(rewards.String())
-
 	return nil
 }
 
