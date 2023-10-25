@@ -1,0 +1,25 @@
+[{
+    "targets": ["1.1.1.1:39090"],
+    "labels": {
+        "job": "Cosmos Validator",
+        "key": "cosmos-validator"
+    }
+}, {
+    "targets": ["1.1.1.2:39090"],
+    "labels": {
+        "job": "Cosmos Sentry Node 1",
+        "key": "cosmos-sentry-node-1"
+    }
+}, {
+    "targets": ["1.1.1.3:39090"],
+    "labels": {
+        "job": "Cosmos Sentry Node 2",
+        "key": "cosmos-sentry-node-2"
+    }
+}, {
+    "targets": ["1.1.1.4:39090"],
+    "labels": {
+        "job": "Cosmos Testnet Validator",
+        "key": "cosmos-testnet-validator"
+    }
+}]

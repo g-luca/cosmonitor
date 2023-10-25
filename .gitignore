@@ -1,1 +1,2 @@
 monitor/alertmanager/alertmanager.yml
+monitor/prometheus/targets.json
