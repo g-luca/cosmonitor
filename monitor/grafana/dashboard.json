@@ -1,4 +1,62 @@
 {
+    "__inputs": [{
+        "name": "DS_PROMETHEUS",
+        "label": "Prometheus",
+        "description": "",
+        "type": "datasource",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus"
+    }],
+    "__elements": {},
+    "__requires": [{
+            "type": "panel",
+            "id": "bargauge",
+            "name": "Bar gauge",
+            "version": ""
+        },
+        {
+            "type": "panel",
+            "id": "gauge",
+            "name": "Gauge",
+            "version": ""
+        },
+        {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "10.3.0-62488"
+        },
+        {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph (old)",
+            "version": ""
+        },
+        {
+            "type": "datasource",
+            "id": "prometheus",
+            "name": "Prometheus",
+            "version": "1.0.0"
+        },
+        {
+            "type": "panel",
+            "id": "stat",
+            "name": "Stat",
+            "version": ""
+        },
+        {
+            "type": "panel",
+            "id": "table",
+            "name": "Table",
+            "version": ""
+        },
+        {
+            "type": "panel",
+            "id": "timeseries",
+            "name": "Time series",
+            "version": ""
+        }
+    ],
     "annotations": {
         "list": [{
             "builtIn": 1,
@@ -24,13 +82,13 @@
     "fiscalYearStartMonth": 0,
     "gnetId": 14914,
     "graphTooltip": 0,
-    "id": 18,
+    "id": null,
     "links": [],
     "liveNow": false,
     "panels": [{
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of peers node's connected to\n\n(Need to change Threshold)",
             "fieldConfig": {
@@ -86,7 +144,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": false,
@@ -124,7 +182,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of peers node's connected to\n\n(Need to change Threshold)",
             "fieldConfig": {
@@ -180,7 +238,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": false,
@@ -243,7 +301,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -295,7 +353,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -322,7 +380,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Height of the chain",
             "fieldConfig": {
@@ -378,7 +436,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": false,
@@ -397,7 +455,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Total number of transactions committed",
             "fieldConfig": {
@@ -453,7 +511,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": false,
@@ -471,7 +529,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of block produced last minute",
             "fieldConfig": {
@@ -556,7 +614,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -574,7 +632,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Block size in bytes",
             "fieldConfig": {
@@ -656,7 +714,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "exemplar": true,
                 "expr": "cometbft_consensus_block_size_bytes{key=\"$key\"}",
@@ -673,7 +731,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -736,7 +794,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -753,7 +811,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of blocks produced last minute",
             "fieldConfig": {
@@ -818,7 +876,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": false,
@@ -837,7 +895,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of peers node's connected to\n\n(Need to change Threshold)",
             "fieldConfig": {
@@ -902,7 +960,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "exemplar": false,
                 "expr": "cometbft_p2p_peers{key=\"$key\"}",
@@ -920,7 +978,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of uncommitted transactions",
             "fieldConfig": {
@@ -985,7 +1043,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "exemplar": false,
                 "expr": "cometbft_mempool_size{key=\"$key\"}",
@@ -1028,7 +1086,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1091,7 +1149,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -1108,7 +1166,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1161,7 +1219,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -1177,7 +1235,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1252,7 +1310,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "disableTextWrap": false,
                 "editorMode": "code",
@@ -1273,7 +1331,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of missed blocks",
             "fieldConfig": {
@@ -1342,7 +1400,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "disableTextWrap": false,
                 "editorMode": "builder",
@@ -1365,7 +1423,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1417,7 +1475,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -1433,7 +1491,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of peers node's connected to\n\n(Need to change Threshold)",
             "fieldConfig": {
@@ -1489,7 +1547,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "disableTextWrap": false,
                 "editorMode": "builder",
@@ -1534,7 +1592,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1580,7 +1638,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "disableTextWrap": false,
                 "editorMode": "code",
@@ -1601,7 +1659,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1657,7 +1715,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -1673,7 +1731,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1725,7 +1783,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -1741,7 +1799,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Number of peers node's connected to\n\n(Need to change Threshold)",
             "fieldConfig": {
@@ -1797,7 +1855,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "disableTextWrap": false,
                 "editorMode": "builder",
@@ -1842,7 +1900,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -1921,7 +1979,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "disableTextWrap": false,
                 "editorMode": "code",
@@ -1940,7 +1998,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2017,7 +2075,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": true,
@@ -2057,7 +2115,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Core node uptime",
             "fieldConfig": {
@@ -2075,8 +2133,7 @@
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [{
-                                "color": "red",
-                                "value": null
+                                "color": "red"
                             },
                             {
                                 "color": "yellow",
@@ -2126,7 +2183,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "editorMode": "code",
                 "exemplar": false,
@@ -2146,7 +2203,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "",
             "fieldConfig": {
@@ -2166,8 +2223,7 @@
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [{
-                                "color": "orange",
-                                "value": null
+                                "color": "orange"
                             },
                             {
                                 "color": "green",
@@ -2207,7 +2263,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "exemplar": false,
                 "expr": "count(count(node_cpu_seconds_total{key=~\"$key\", mode='system'}) by (cpu))",
@@ -2225,7 +2281,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "",
             "fieldConfig": {
@@ -2240,8 +2296,7 @@
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [{
-                                "color": "green",
-                                "value": null
+                                "color": "green"
                             },
                             {
                                 "color": "light-yellow",
@@ -2286,7 +2341,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": false,
                     "expr": "100 - (avg by(alias) (irate(node_cpu_seconds_total{key=~\"$key\", mode=\"idle\"}[1m])) * 100)",
@@ -2299,7 +2354,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": false,
                     "expr": "(1 - (node_memory_MemAvailable_bytes{key=~\"$key\"} / (node_memory_MemTotal_bytes{key=~\"$key\"})))* 100",
@@ -2312,7 +2367,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "(1 - (node_memory_SwapFree_bytes{key=~\"$key\"} / node_memory_SwapTotal_bytes{key=~\"$key\"})) * 100",
@@ -2325,7 +2380,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "100 - (node_filesystem_free_bytes{key=~\"$key\", device=\"/dev/sda2\"} *100 / node_filesystem_size_bytes{key=~\"$key\", device=\"/dev/sda2\"})",
@@ -2338,7 +2393,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "100 - (node_filesystem_free_bytes{key=~\"$key\", device=\"/dev/sda1\"} *100 / node_filesystem_size_bytes{key=~\"$key\", device=\"/dev/sda1\"})",
@@ -2366,7 +2421,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "",
             "fieldConfig": {
@@ -2380,8 +2435,7 @@
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [{
-                                "color": "green",
-                                "value": null
+                                "color": "green"
                             },
                             {
                                 "color": "rgba(237, 129, 40, 0.89)",
@@ -2425,7 +2479,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "exemplar": true,
                 "expr": "node_filefd_allocated{key=~\"$key\"}",
@@ -2442,7 +2496,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2462,8 +2516,7 @@
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [{
-                                "color": "green",
-                                "value": null
+                                "color": "green"
                             },
                             {
                                 "color": "red",
@@ -2512,8 +2565,7 @@
                                 "value": {
                                     "mode": "absolute",
                                     "steps": [{
-                                            "color": "#5794F2",
-                                            "value": null
+                                            "color": "#5794F2"
                                         },
                                         {
                                             "color": "rgba(237, 129, 40, 0.89)"
@@ -2554,8 +2606,7 @@
                                 "value": {
                                     "mode": "absolute",
                                     "steps": [{
-                                            "color": "rgba(245, 54, 54, 0.9)",
-                                            "value": null
+                                            "color": "rgba(245, 54, 54, 0.9)"
                                         },
                                         {
                                             "color": "rgba(237, 129, 40, 0.89)",
@@ -2601,8 +2652,7 @@
                                 "value": {
                                     "mode": "absolute",
                                     "steps": [{
-                                            "color": "green",
-                                            "value": null
+                                            "color": "green"
                                         },
                                         {
                                             "color": "rgba(237, 129, 40, 0.89)",
@@ -2738,7 +2788,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -2754,7 +2804,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -2770,7 +2820,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -2786,7 +2836,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "expr": "",
                     "format": "table",
@@ -2823,7 +2873,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "",
             "fieldConfig": {
@@ -2843,8 +2893,7 @@
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [{
-                            "color": "green",
-                            "value": null
+                            "color": "green"
                         }]
                     },
                     "unit": "bytes"
@@ -2879,7 +2928,7 @@
             "targets": [{
                 "datasource": {
                     "type": "prometheus",
-                    "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                    "uid": "${DS_PROMETHEUS}"
                 },
                 "exemplar": false,
                 "expr": "node_memory_MemTotal_bytes{key=~\"$key\"}",
@@ -2901,7 +2950,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fieldConfig": {
                 "defaults": {
@@ -2968,7 +3017,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "node_load1{key=~\"$key\"}*100",
@@ -2982,7 +3031,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "node_load5{key=~\"$key\"}*100",
@@ -2996,7 +3045,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "node_load15{key=~\"$key\"}*100",
@@ -3096,7 +3145,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "decimals": 2,
             "description": "node_disk_io_time_seconds_total：\nThe number of milliseconds the disk spends on input/output operations. This value is the accumulated value.（Milliseconds Spent Doing I/Os）\n\nirate(node_disk_io_time_seconds_total[1m])：\nCalculate the rate per second: (last value - last previous value) / timestamp difference, that is, the percentage of time that the disk spends on I/O operations in 1 second.",
@@ -3144,7 +3193,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "avg(irate(node_cpu_seconds_total{key=~\"$key\",mode=\"system\"}[1m]))",
@@ -3159,7 +3208,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "avg(irate(node_cpu_seconds_total{key=~\"$key\",mode=\"user\"}[1m]))",
@@ -3173,7 +3222,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "avg(irate(node_cpu_seconds_total{key=~\"$key\",mode=\"idle\"}[1m]))",
@@ -3188,7 +3237,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "avg(irate(node_cpu_seconds_total{key=~\"$key\",mode=\"iowait\"}[1m]))",
@@ -3202,7 +3251,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_io_time_seconds_total{key=~\"$key\"}[1m])",
@@ -3215,7 +3264,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "avg(irate(node_cpu_seconds_total{mode=\"system\"}[1m]))",
@@ -3272,7 +3321,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Reads completed: Reads per second per disk partition\n\nWrites completed: Number of writes per second per disk partition\n\nIO now Number of input/output requests being processed per disk partition per second",
             "fill": 2,
@@ -3321,7 +3370,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_reads_completed_total{key=~\"$key\"}[1m])",
@@ -3336,7 +3385,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_writes_completed_total{key=~\"$key\"}[1m])",
@@ -3351,7 +3400,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "node_disk_io_now{key=~\"$key\"}",
@@ -3402,7 +3451,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Read bytes The number of bits read per second per disk partition\nWritten bytes The number of bits written per second per disk partition",
             "fill": 2,
@@ -3452,7 +3501,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_read_bytes_total{key=~\"$key\"}[1m])",
@@ -3466,7 +3515,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_written_bytes_total{key=~\"$key\"}[1m])",
@@ -3520,7 +3569,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "Read time ms Number of seconds per disk partition read operation\n\nWrite time ms Number of seconds spent per disk partition write operation\n\nIO time ms Number of seconds spent per disk partition input/output operation\n\n IO time weighted Weighted seconds spent per disk partition input/output operation",
             "fill": 3,
@@ -3569,7 +3618,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_io_time_seconds_total{key=~\"$key\"}[1m])",
@@ -3584,7 +3633,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_io_time_weighted_seconds_total{key=~\"$key\"}[1m])",
@@ -3598,7 +3647,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_read_time_seconds_total{key=~\"$key\"}[1m])",
@@ -3612,7 +3661,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
                     "expr": "irate(node_disk_write_time_seconds_total{key=~\"$key\"}[1m])",
@@ -3661,7 +3710,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "fill": 1,
             "fillGradient": 0,
@@ -3709,7 +3758,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3725,7 +3774,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3778,7 +3827,7 @@
             "dashes": false,
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "description": "CurrEstab - TCP connections with current state ESTABLISHED or CLOSE-WAIT\n\nActiveOpens - TCP average connections that have been converted from CLOSED state to SYN-SENT state (within 1 minute)\n\nPassiveOpens - Directly from LISTEN state The average number of TCP connections to SYN-RCVD state (within 1 minute)\n\nTCP_all oc - the number of TCP sockets allocated (established, applied to sk_buff)\n\nTCP_inuse - in use (listening The number of TCP sockets \n\nTCP_tw - the number of TCP connections waiting to be closed",
             "fill": 0,
@@ -3823,7 +3872,7 @@
             "targets": [{
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3840,7 +3889,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3855,7 +3904,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3871,7 +3920,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3886,7 +3935,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3901,7 +3950,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                        "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
                     "exemplar": true,
@@ -3953,14 +4002,10 @@
     ],
     "templating": {
         "list": [{
-            "current": {
-                "selected": false,
-                "text": "testnet-desmos-validator",
-                "value": "testnet-desmos-validator"
-            },
+            "current": {},
             "datasource": {
                 "type": "prometheus",
-                "uid": "a9645b88-cd26-4447-abda-3b6766e8beb5"
+                "uid": "${DS_PROMETHEUS}"
             },
             "definition": "label_values(node_info,key)",
             "hide": 0,
