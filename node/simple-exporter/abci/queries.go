@@ -7,13 +7,12 @@ import (
 	distributionTypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	slashingTypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingTypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	tmhttp "github.com/tendermint/tendermint/rpc/client/http"
+	"github.com/tendermint/tendermint/rpc/client/http"
 	"time"
 )
 
 // GetValidatorSigningInfo queries the ABCI endpoint to get the SigningInfo of a given Validator
-func GetValidatorSigningInfo(rpc string, validatorAddr string) (*slashingTypes.ValidatorSigningInfo, error) {
-	var client, _ = tmhttp.New(rpc, "")
+func GetValidatorSigningInfo(client *http.HTTP, validatorAddr string) (*slashingTypes.ValidatorSigningInfo, error) {
 
 	// prepare the request data
 	var request = slashingTypes.QuerySigningInfoRequest{
@@ -44,8 +43,7 @@ func GetValidatorSigningInfo(rpc string, validatorAddr string) (*slashingTypes.V
 }
 
 // GetValidators queries the ABCI endpoint to get the Validators
-func GetValidators(rpc string) (*[]stakingTypes.Validator, error) {
-	var client, _ = tmhttp.New(rpc, "")
+func GetValidators(client *http.HTTP) (*[]stakingTypes.Validator, error) {
 	var nextKey []byte
 	var done = false
 
@@ -98,9 +96,7 @@ func GetValidators(rpc string) (*[]stakingTypes.Validator, error) {
 }
 
 // GetValidatorCommission queries the ABCI endpoint to get the Validator commissions
-func GetValidatorCommission(rpc string, validatorAddr string) (*types.DecCoins, error) {
-	var client, _ = tmhttp.New(rpc, "")
-
+func GetValidatorCommission(client *http.HTTP, validatorAddr string) (*types.DecCoins, error) {
 	// prepare the request data
 	var request = distributionTypes.QueryValidatorCommissionRequest{
 		ValidatorAddress: validatorAddr,
@@ -130,8 +126,7 @@ func GetValidatorCommission(rpc string, validatorAddr string) (*types.DecCoins, 
 }
 
 // GetValidatorRewards queries the ABCI endpoint to get the Validator rewards
-func GetValidatorRewards(rpc string, validatorAddr string) (*types.DecCoins, error) {
-	var client, _ = tmhttp.New(rpc, "")
+func GetValidatorRewards(client *http.HTTP, validatorAddr string) (*types.DecCoins, error) {
 
 	// prepare the request data
 	var request = distributionTypes.QueryValidatorOutstandingRewardsRequest{

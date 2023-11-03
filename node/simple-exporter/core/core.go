@@ -1,71 +1,42 @@
 package core
 
 import (
-	"context"
-	"encoding/base64"
 	"errors"
 	"fmt"
 	"github.com/cosmos/btcutil/bech32"
 	sdkTypes "github.com/cosmos/cosmos-sdk/types"
 	stakingTypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	tmhttp "github.com/tendermint/tendermint/rpc/client/http"
+	ctypes "github.com/tendermint/tendermint/types"
 	"log"
 	"simple-exporter/abci"
 	"simple-exporter/prometheus"
 	"simple-exporter/rpc"
-	"simple-exporter/types"
-	"strconv"
 	"strings"
 	"time"
 )
 
-func _ListenWS(rpcAddr string) {
-
-	var ctx = context.Background()
-
-	// create the WebSocket client
-	client, err := tmhttp.NewWithTimeout(rpcAddr, "/websocket", 5)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	// expect a valid status query response
-	_, err = client.Status(ctx)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	//with "https://rpc-cosmoshub-ia.cosmosia.notional.ventures:443" does work, why?
-	// start the client
-	err = client.Start()
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	// subscribe to the NewBlockHeader event (is lighter the NewBlock)
-	subscribe, err := client.Subscribe(ctx, "exporter_subscribe", "tm.event = 'NewBlockHeader'")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	// handle the new blocks
-	for {
-		select {
-		case <-subscribe:
-			log.Println("new block")
-		}
-	}
-
-}
-
 func ListenWS(rpcAddr string) {
+	// create the ABCI client
+	client, err := tmhttp.New(rpcAddr, "")
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	defer func() {
+		err = client.Stop()
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}()
+
 	var retry = 0
 	const retryTimeout = 10
 	for true {
-		//TODO: replace with receive block from WS -> UpdateMetrics()
 		time.Sleep(3 * time.Second)
-		var err = UpdateMetrics(rpcAddr)
+		var err = UpdateMetrics(client)
 		if err != nil {
+			log.Println(err.Error())
 			prometheus.UpdateNodeInfo(false, "", "", "")
 			retry += 1
 			time.Sleep(retryTimeout * time.Second)
@@ -78,49 +49,49 @@ func ListenWS(rpcAddr string) {
 	}
 }
 
-func UpdateMetrics(rpcAddr string) error {
+func UpdateMetrics(client *tmhttp.HTTP) error {
 	// get the node info
-	nodeInfo, err := rpc.GetNodeInfo(rpcAddr)
+	nodeInfo, err := rpc.GetNodeInfo(client)
 	if err != nil {
 		return err
 	}
-	log.Println(fmt.Sprintf("Fetched node '%s' info", nodeInfo.Result.NodeInfo.Moniker))
-	log.Println(fmt.Sprintf("Network: '%s'", nodeInfo.Result.NodeInfo.Network))
+	log.Println(fmt.Sprintf("Fetched node '%s' info", nodeInfo.NodeInfo.Moniker))
+	log.Println(fmt.Sprintf("Network: '%s'", nodeInfo.NodeInfo.Network))
 
 	// get the Validators from Consensus
-	consValidators, err := rpc.GetValidators(rpcAddr)
+	consValidators, err := rpc.GetValidators(client)
 	if err != nil {
 		return err
 	}
 
-	prometheus.UpdateNodeInfo(true, nodeInfo.Result.NodeInfo.Network, nodeInfo.Result.NodeInfo.Moniker, nodeInfo.Result.NodeInfo.ID)
+	prometheus.UpdateNodeInfo(true, nodeInfo.NodeInfo.Network, nodeInfo.NodeInfo.Moniker, string(nodeInfo.NodeInfo.DefaultNodeID))
 
 	// get the wanted Consensus validator
-	var consValidator, rank = getConsValidatorFromAddress(nodeInfo.Result.ValidatorInfo.Address, consValidators)
+	var consValidator, rank = getConsValidatorFromAddress(nodeInfo.ValidatorInfo.Address.String(), consValidators)
 	if consValidator == nil {
-		log.Println(fmt.Sprintf("Node '%s' is not a Validator", nodeInfo.Result.NodeInfo.Moniker))
+		log.Println(fmt.Sprintf("Node '%s' is not a Validator", nodeInfo.NodeInfo.Moniker))
 		return nil
 	}
 
 	// get the Validators from the Cosmos
-	abciValidators, err := abci.GetValidators(rpcAddr)
+	abciValidators, err := abci.GetValidators(client)
 	if err != nil {
 		return err
 	}
 
 	// retrieve the validator from the abci validators query from the consensus one
-	var wantedValidator = retrieveValidator(*consValidator, abciValidators)
+	var wantedValidator = retrieveValidator(consValidator, abciValidators)
 	if wantedValidator == nil {
 		return errors.New("cannot retrieve Validator from ConsValidator")
 	}
 
 	// compute the valcons address
-	valConsAddr, err := computeValConsAddr(consValidator.Address, wantedValidator.OperatorAddress)
+	valConsAddr, err := computeValConsAddr(consValidator.Address.String(), wantedValidator.OperatorAddress)
 	if err != nil {
 		return err
 	}
 
-	signingInfo, err := abci.GetValidatorSigningInfo(rpcAddr, *valConsAddr)
+	signingInfo, err := abci.GetValidatorSigningInfo(client, *valConsAddr)
 	if err != nil {
 		return err
 	}
@@ -130,11 +101,7 @@ func UpdateMetrics(rpcAddr string) error {
 
 	// consensus info
 	prometheus.UpdateTotalVotingPower(uint64(calculateTotalVotingPower(consValidators)))
-	vp, err := strconv.Atoi(consValidator.VotingPower)
-	if err != nil {
-		vp = 0
-	}
-	prometheus.UpdateVotingPower(uint64(vp))
+	prometheus.UpdateVotingPower(uint64(consValidator.VotingPower))
 
 	// validator info
 	prometheus.UpdateRank(rank)
@@ -151,14 +118,14 @@ func UpdateMetrics(rpcAddr string) error {
 	prometheus.UpdateTombstoned(signingInfo.Tombstoned)
 
 	// get the validator commission
-	commission, err := abci.GetValidatorCommission(rpcAddr, wantedValidator.OperatorAddress)
+	commission, err := abci.GetValidatorCommission(client, wantedValidator.OperatorAddress)
 	if err != nil {
 		return err
 	}
 	prometheus.UpdateValidatorCommission(commission)
 
 	// get the validator rewards
-	rewards, err := abci.GetValidatorRewards(rpcAddr, wantedValidator.OperatorAddress)
+	rewards, err := abci.GetValidatorRewards(client, wantedValidator.OperatorAddress)
 	if err != nil {
 		return err
 	}
@@ -199,43 +166,34 @@ func computeValConsAddr(consAddress string, operatorAddress string) (*string, er
 	return &valConsAddr, nil
 }
 
-func calculateTotalVotingPower(consValidators *[]types.RpcValidator) int64 {
+func calculateTotalVotingPower(consValidators *[]*ctypes.Validator) int64 {
 	var totalVotingPower int64 = 0
 	for _, val := range *consValidators {
-		vp, convErr := strconv.ParseInt(val.VotingPower, 10, 64)
-		if convErr != nil {
-			continue
-		}
-		totalVotingPower += vp
+		totalVotingPower += val.VotingPower
 	}
 	return totalVotingPower
 }
-func getConsValidatorFromAddress(address string, consValidators *[]types.RpcValidator) (*types.RpcValidator, int) {
-	var validator *types.RpcValidator = nil
+func getConsValidatorFromAddress(address string, consValidators *[]*ctypes.Validator) (*ctypes.Validator, int) {
+	var validator *ctypes.Validator = nil
 
 	for i, v := range *consValidators {
-		if v.Address == address {
-			return &v, i + 1
+		if v.Address.String() == address {
+			return v, i + 1
 		}
 	}
 	return validator, -100
 }
 
-// calculateB64PubKeyFromVal returns the Base64 Public Key from the Validator struct
-// Note: this is needed since `TmConsPublicKey()` uses the cachedValue which is not available from the ABCI query
-func calculateB64PubKeyFromVal(validator *stakingTypes.Validator) string {
-	var keyBytes = validator.ConsensusPubkey.Value
-	if len(keyBytes) > 32 {
-		keyBytes = keyBytes[2:]
-	}
-	return base64.StdEncoding.EncodeToString(keyBytes)
-}
-
 // retrieveValidator retrieves the current validator inside the Validators from the ConsValidator
-func retrieveValidator(consValidator types.RpcValidator, validators *[]stakingTypes.Validator) *stakingTypes.Validator {
+func retrieveValidator(consValidator *ctypes.Validator, validators *[]stakingTypes.Validator) *stakingTypes.Validator {
 	for _, validator := range *validators {
-		pubKey := calculateB64PubKeyFromVal(&validator)
-		if pubKey == consValidator.PubKey.Value {
+		var keyBytes = validator.ConsensusPubkey.Value
+		if len(keyBytes) > 32 {
+			keyBytes = keyBytes[2:]
+		}
+
+		vsPubKey := consValidator.PubKey.Bytes()
+		if string(keyBytes) == string(vsPubKey) {
 			return &validator
 		}
 	}
