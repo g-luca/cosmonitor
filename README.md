@@ -32,6 +32,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh && r
 5. Enable the firewall:
 
 ```
+ sudo ufw allow ssh
  sudo ufw allow 9090/tcp
  sudo ufw enable
 ```
