@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s # Scrape the targets every N seconds.
+  scrape_timeout: 15s # If scrape fails, retry in N seconds. Must be
+  evaluation_interval: 15s # Evaluate rules every N seconds.
+
+scrape_configs:
+  # scrape the default cometbft prometheus metrics
+  - job_name: cometbft
+    scrape_interval: 5s # Scrape the targets every N seconds.
+    metrics_path: /metrics
+    honor_labels: true
+    static_configs:
+      - targets: [host.docker.internal:X6660]
+
+
+  # scrape the cosmonitor metrics
+  - job_name: cosmonitor
+    scrape_interval: 5s # Scrape the targets every N seconds.
+    metrics_path: /metrics
+    honor_labels: true
+    static_configs:
+      - targets: [ cosmonitorX:9090 ]

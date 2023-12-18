@@ -1,0 +1,72 @@
+version: '3'
+services:
+  # Node 0
+  cosmonitor0:
+    image: graziottil/cosmonitor:latest
+    container_name: cosmonitor0
+    environment:
+      NODE_RPC: "http://host.docker.internal:26657"
+    ports:
+      - "9110:9090"
+    extra_hosts:
+      # let the container access the host network (needs to access the node rpc endpoint)
+      - "host.docker.internal:host-gateway"
+  prometheus0:
+    image: prom/prometheus:latest
+    container_name: monitor-prometheus0
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data0:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/multi/config0.yml'
+      - '--log.level=debug'
+    ports:
+      - "39090:9090"
+    extra_hosts:
+      # let the container access the host network (needs to access the node prometheus endpoint)
+      - "host.docker.internal:host-gateway"
+  # ------
+
+  # Node 1
+  cosmonitor1:
+    image: graziottil/cosmonitor:latest
+    container_name: cosmonitor1
+    environment:
+      NODE_RPC: "http://host.docker.internal:36657"
+    ports:
+      - "9120:9090"
+    extra_hosts:
+      # let the container access the host network (needs to access the node rpc endpoint)
+      - "host.docker.internal:host-gateway"
+  prometheus1:
+    image: prom/prometheus:latest
+    container_name: monitor-prometheus1
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data1:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/multi/config1.yml'
+      - '--log.level=debug'
+    ports:
+      - "39091:9090"
+    extra_hosts:
+      # let the container access the host network (needs to access the node prometheus endpoint)
+      - "host.docker.internal:host-gateway"
+  # ------
+
+  #------------------------------------
+  # Shared hardware prometheus exporter
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - "9100"
+
+networks:
+  monitoring:
+
+volumes:
+  prometheus-data0:
+    driver: local
+  prometheus-data1:
+    driver: local
