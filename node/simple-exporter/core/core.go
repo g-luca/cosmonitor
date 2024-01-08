@@ -3,8 +3,7 @@ package core
 import (
 	"errors"
 	"fmt"
-	"github.com/cosmos/btcutil/bech32"
-	sdkTypes "github.com/cosmos/cosmos-sdk/types"
+	bech322 "github.com/cosmos/cosmos-sdk/types/bech32"
 	stakingTypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	tmhttp "github.com/tendermint/tendermint/rpc/client/http"
 	ctypes "github.com/tendermint/tendermint/types"
@@ -12,7 +11,6 @@ import (
 	"simple-exporter/abci"
 	"simple-exporter/prometheus"
 	"simple-exporter/rpc"
-	"strings"
 	"time"
 )
 
@@ -73,10 +71,42 @@ func UpdateMetrics(client *tmhttp.HTTP) error {
 		return nil
 	}
 
-	// get the Validators from the Cosmos
-	abciValidators, err := abci.GetValidators(client)
+	// set the generic Validators Consensus info (that don't need Validators ABCI Query)
+	prometheus.UpdateTotalVotingPower(uint64(calculateTotalVotingPower(consValidators)))
+	prometheus.UpdateVotingPower(uint64(consValidator.VotingPower))
+	prometheus.UpdateRank(rank)
+
+	// retrieve chain Bech32 Prefix from the ABCI endpoint (since v0.46)
+	bech32Prefix, err := abci.GetBech32Prefix(client)
+	if err != nil {
+		// chain ot supported, try getting an address
+		bech32Prefix, err = abci.GetBech32PrefixFromAuthAccounts(client)
+		if err != nil {
+			return err
+		}
+	}
+
+	// calculate the validator "valcons" address
+	valConsAddr, err := bech322.ConvertAndEncode(bech32Prefix+"valcons", consValidator.Address.Bytes())
 	if err != nil {
 		return err
+	}
+
+	// update signing info
+	signingInfo, err := abci.GetValidatorSigningInfo(client, valConsAddr)
+	if err != nil {
+		return err
+	}
+	prometheus.UpdateMissedBlocks(signingInfo.MissedBlocksCounter)
+	prometheus.UpdateTombstoned(signingInfo.Tombstoned)
+
+	// get the Validator info from the ABCI Queries
+	// NOTE: ICS Consumer chains may not have this endpoints
+	abciValidators, err := abci.GetValidators(client)
+	if err != nil {
+		println("Cannot get ABCI Validator Info (ICS chain)")
+		prometheus.UpdateValidatorInfo(true, nodeInfo.NodeInfo.Moniker, "", valConsAddr)
+		return nil
 	}
 
 	// retrieve the validator from the abci validators query from the consensus one
@@ -85,26 +115,10 @@ func UpdateMetrics(client *tmhttp.HTTP) error {
 		return errors.New("cannot retrieve Validator from ConsValidator")
 	}
 
-	// compute the valcons address
-	valConsAddr, err := computeValConsAddr(consValidator.Address.String(), wantedValidator.OperatorAddress)
-	if err != nil {
-		return err
-	}
-
-	signingInfo, err := abci.GetValidatorSigningInfo(client, *valConsAddr)
-	if err != nil {
-		return err
-	}
-
 	// validator generic info
-	prometheus.UpdateValidatorInfo(true, wantedValidator.GetMoniker(), wantedValidator.OperatorAddress, *valConsAddr)
+	prometheus.UpdateValidatorInfo(true, wantedValidator.GetMoniker(), wantedValidator.OperatorAddress, valConsAddr)
 
-	// consensus info
-	prometheus.UpdateTotalVotingPower(uint64(calculateTotalVotingPower(consValidators)))
-	prometheus.UpdateVotingPower(uint64(consValidator.VotingPower))
-
-	// validator info
-	prometheus.UpdateRank(rank)
+	// validator details
 	prometheus.UpdateCommissionMaxChangeRate(wantedValidator.Commission.MaxChangeRate.MustFloat64())
 	prometheus.UpdateCommissionMaxRate(wantedValidator.Commission.MaxRate.MustFloat64())
 	prometheus.UpdateCommissionRate(wantedValidator.Commission.Rate.MustFloat64())
@@ -114,8 +128,6 @@ func UpdateMetrics(client *tmhttp.HTTP) error {
 
 	// validator signing info
 	prometheus.UpdateMinSelfDelegation(wantedValidator.MinSelfDelegation.Uint64())
-	prometheus.UpdateMissedBlocks(signingInfo.MissedBlocksCounter)
-	prometheus.UpdateTombstoned(signingInfo.Tombstoned)
 
 	// get the validator commission
 	commission, err := abci.GetValidatorCommission(client, wantedValidator.OperatorAddress)
@@ -132,38 +144,6 @@ func UpdateMetrics(client *tmhttp.HTTP) error {
 	prometheus.UpdateValidatorRewards(rewards)
 
 	return nil
-}
-
-// computeValConsAddr computes the valcons address from the consensus address and the operator address.
-// The `operatorAddress` is needed to recover the HRP, the `consAddress` is needed to retrieve the address data bytes.
-func computeValConsAddr(consAddress string, operatorAddress string) (*string, error) {
-	// get the hrp
-	hrp, _, err := bech32.Decode(operatorAddress, bech32.MaxLengthBIP173)
-	if err != nil {
-		return nil, err
-	}
-	// generate the valcons HRP from the valoper one
-	var valConsHrp = strings.ReplaceAll(hrp, "valoper", "valcons")
-
-	// Decode the consensus address hex string, this will generate a cosmsovalcons address
-	consensusAddressBytes, err := sdkTypes.ConsAddressFromHex(consAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	// get the data from it
-	_, data, err := bech32.Decode(consensusAddressBytes.String(), bech32.MaxLengthBIP173)
-	if err != nil {
-		return nil, err
-	}
-
-	// regenerate the valcons Bech32 address with the wanted HRP
-	valConsAddr, err := bech32.Encode(valConsHrp, data)
-	if err != nil {
-		return nil, err
-	}
-
-	return &valConsAddr, nil
 }
 
 func calculateTotalVotingPower(consValidators *[]*ctypes.Validator) int64 {
